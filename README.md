@@ -1,5 +1,5 @@
 # PubSubExercise
-Small solution that demonstrates the concepts of the Publish/Subscribe pattern.
+Small solution that demonstrates the concepts of the Publish/Subscribe pattern. 
 
 ## Requirements
 Produce a small solution that demonstrates the concepts of the Publish/Subscribe pattern performing the followings:
