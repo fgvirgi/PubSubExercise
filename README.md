@@ -21,7 +21,7 @@ The components are
 - StudentSubscriber: worker service used to simulate the subscription and consuming process for multiple students.
 
 The components are using RabbitMQ for underlying messaging transport.  
-__Note__: The implementation only focuses on exchanging messages. It can be further improved to consider security, message order, etc. [see points from the Consideration slide](#pattern-considerations). The design is flexible having the message client implemented through an abstraction interface ensuring easy exchange of a later client implementation with a different technology.
+__Note__: The implementation only focuses on exchanging messages. It can be further improved to consider security, message order, etc. [see points from Pattern Considerations](#pattern-considerations). The design is flexible having the message client implemented through an abstraction interface ensuring easy exchange of a later client implementation with a different technology.
 
 
 ## Publish/Subscribe Pattern
@@ -57,9 +57,9 @@ Mitigation: consider the capabilities when chossing an existing messaging produc
 
 ### Pattern Considerations
 Consider the following points when deciding how to implement this pattern:
-- __Existing technologies.-- It is strongly recommended to use available messaging products and services that support a publish-subscribe model, rather than building your own. E.g. RabbitMQ, Azure Service Bus, Google Cloud Pub/Sub, Redis, Apache Kafka.
+- __Existing technologies.__ It is strongly recommended to use available messaging products and services that support a publish-subscribe model, rather than building your own. E.g. RabbitMQ, Azure Service Bus, Google Cloud Pub/Sub, Redis, Apache Kafka.
 - __Subscription handling.__ The messaging infrastructure must provide mechanisms that consumers can use to subscribe to or unsubscribe from available channels.
-- __Security. Connecting to any message channel must be restricted by security policy to prevent eavesdropping by unauthorized users or applications.
+- __Security.__ Connecting to any message channel must be restricted by security policy to prevent eavesdropping by unauthorized users or applications.
 - __Subsets of messages.__ Subscribers are usually only interested in subset of the messages distributed by a publisher. Consider usage of topics and content filtering (via attributes/routing keys)
 - __Wildcard subscribers.__ Consider allowing subscribers to subscribe to multiple topics via wildcards.
 - __Message ordering.__ The order in which consumer instances receive messages isn't guaranteed and doesn't necessarily reflect the order in which the messages were published. Some solutions may require that messages are processed in a specific order. 
