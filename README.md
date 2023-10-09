@@ -1,5 +1,8 @@
 # PubSubExercise
 Small solution that demonstrates the concepts of the Publish/Subscribe pattern. 
+[1. Requirements](#requirements)
+[2. Demo details](#demo-details)
+[3. Publish/Subscribe Pattern](#publishsubscribe-pattern)
 
 ## Requirements
 Produce a small solution that demonstrates the concepts of the Publish/Subscribe pattern performing the followings:
@@ -7,6 +10,20 @@ Produce a small solution that demonstrates the concepts of the Publish/Subscribe
 - Transform that data in some way
 - Transport that data to a set of subscribers
 - Have the subscribers display the transformed data
+
+## Demo details
+For demonstration purpose consider an *University Course Registration System* used by:
+- teaches to publish courses related to their specified domains
+- students to subscribe to courses from the teachers they are interested in
+
+The components are
+- TeacherPublisherAPI: API used to publish courses
+- TeacherPublishingDemo: console application used to exemplify multiple publisher teachers
+- StudentSubscriber: worker service used to simulate the subscription and consuming process for multiple students.
+
+The components are using RabbitMQ for underlying messaging transport.
+__Note__: The implementation only focuses on exchanging messages. It can be further improved to consider security, message order, etc. [see points from the Consideration slide](#pattern-considerations). The design is flexible having the message client implemented through an abstraction interface ensuring easy exchange of a later client implementation with a different technology.
+
 
 ## Publish/Subscribe Pattern
 ### Pattern definition
@@ -40,4 +57,15 @@ Mitigation: Use versioned messaging format or versioned endpoints.
 Mitigation: consider the capabilities when chossing an existing messaging product according to the application’s requirements.
 
 ### Pattern Considerations
-## Demo details
+Consider the following points when deciding how to implement this pattern:
+-- __Existing technologies.-- It is strongly recommended to use available messaging products and services that support a publish-subscribe model, rather than building your own. E.g. RabbitMQ, Azure Service Bus, Google Cloud Pub/Sub, Redis, Apache Kafka.
+-- __Subscription handling.__ The messaging infrastructure must provide mechanisms that consumers can use to subscribe to or unsubscribe from available channels.
+-- __Security. Connecting to any message channel must be restricted by security policy to prevent eavesdropping by unauthorized users or applications.
+-- __Subsets of messages.__ Subscribers are usually only interested in subset of the messages distributed by a publisher. Consider usage of topics and content filtering (via attributes/routing keys)
+-- __Wildcard subscribers.__ Consider allowing subscribers to subscribe to multiple topics via wildcards.
+-- __Message ordering.__ The order in which consumer instances receive messages isn't guaranteed and doesn't necessarily reflect the order in which the messages were published. Some solutions may require that messages are processed in a specific order. 
+-- __Poison messages.__ A malformed message can cause a service instance to fail. The system should prevent such messages being returned to the queue. Instead, capture and store the details of these messages elsewhere so that they can be analyzed if necessary.
+-- __Repeated messages.__ The same message might be sent more than once. For example, the sender might fail after posting a message. Then a new instance of the sender might start up and repeat the message. You may need to implement duplicate message detection and removal.
+-- __Message expiration.__ A message might have a limited lifetime. If it isn't processed within this period, it might no longer be relevant and should be discarded. A sender can specify an expiration time as part of the data in the message. A receiver can examine this information before deciding whether to perform the business logic associated with the message.
+-- __Message scheduling.__ A message might be temporarily embargoed and should not be processed until a specific date and time. The message should not be available to a receiver until this time.
+
